@@ -1,0 +1,42 @@
+entrypoint = "index.js"
+hidden = [".config"]
+modules = ["nodejs-20", "nix"]
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+publicDir = "/"
+deploymentTarget = "static"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "PORT=3000 node index.js"
+waitForPort = 3000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
